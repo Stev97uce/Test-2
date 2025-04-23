@@ -48,3 +48,12 @@ services:
       - ./DB/sqlserver:/docker-entrypoint-initdb.d
     networks:
       - ventas_network
+      
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - ventas_network
