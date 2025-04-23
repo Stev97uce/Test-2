@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # Backend (Flask)
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    depends_on:
+      - mysql_db
+      - postgres_db
+      - sqlserver_db
+
+  # MySQL
+  mysql_db:
+    image: mysql:8.0  
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_password
+      MYSQL_DATABASE: ventas_mysql
+    volumes:
+      - ./scripts/mysql:/docker-entrypoint-initdb.d 
+    ports:
+      - "3306:3306"  
+
+  # PostgreSQL
+  postgres_db:
+    image: postgres:13  
+    environment:
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: postgres
+    volumes:
+      - ./scripts/postgres:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"  
+      
+  # SQL Server
+  sqlserver_db:
+    image: mcr.microsoft.com/mssql/server:2019-latest  
+    environment:
+      SA_PASSWORD: SqlServerPassword123!
+      ACCEPT_EULA: Y
+    volumes:
+      - ./scripts/sqlserver:/docker-entrypoint-initdb.d
+    ports:
+      - "1433:1433"  
