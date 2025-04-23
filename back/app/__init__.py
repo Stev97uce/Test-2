@@ -8,27 +8,27 @@ load_dotenv()  # Carga variables del archivo .env
 app = Flask(__name__)
 CORS(app)  # Permite peticiones desde el frontend
 
-# Configuración de conexiones (se usará en routes.py)
+# Ejemplo de configuración (usando nombres de servicio)
 app.config['MYSQL_CONFIG'] = {
-    'host': os.getenv('MYSQL_HOST'),
-    'user': os.getenv('MYSQL_USER'),
-    'password': os.getenv('MYSQL_PASSWORD'),
-    'database': os.getenv('MYSQL_DATABASE')
+    'host': 'mysql_db',  # Nombre del servicio en docker-compose.yml
+    'user': 'root',
+    'password': 'mysql_password',
+    'database': 'ventas_mysql'
 }
 
 app.config['POSTGRES_CONFIG'] = {
-    'host': os.getenv('POSTGRES_HOST'),
-    'user': os.getenv('POSTGRES_USER'),
-    'password': os.getenv('POSTGRES_PASSWORD'),
-    'database': os.getenv('POSTGRES_DATABASE')
+    'host': 'postgres_db',  # Nombre del servicio
+    'user': 'postgres',
+    'password': 'postgres_password',
+    'database': 'postgres'
 }
 
 app.config['SQLSERVER_CONFIG'] = {
-    'driver': os.getenv('SQLSERVER_DRIVER'),
-    'server': os.getenv('SQLSERVER_HOST'),
-    'database': os.getenv('SQLSERVER_DATABASE'),
-    'uid': os.getenv('SQLSERVER_USER'),
-    'pwd': os.getenv('SQLSERVER_PASSWORD')
+    'driver': 'ODBC Driver 17 for SQL Server',
+    'server': 'sqlserver_db',  # Nombre del servicio
+    'database': 'master',
+    'uid': 'sa',
+    'pwd': 'SqlServerPassword123!'
 }
 
 from app import routes  # Importar rutas al final para evitar circular imports

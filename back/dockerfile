@@ -2,14 +2,18 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Copiar requirements e instalar dependencias
+# Instalar dependencias del sistema para pyodbc y otras librerías
+RUN apt-get update && \
+    apt-get install -y gcc python3-dev unixodbc-dev unixodbc && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copiar e instalar dependencias de Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el resto de los archivos
+# Copiar el código de la aplicación
 COPY . .
 
-# Variables de entorno para Flask
 ENV FLASK_APP=app
 ENV FLASK_ENV=development
 

@@ -1,9 +1,13 @@
 version: '3.8'
 
+# Definir una red personalizada
+networks:
+  ventas_network:
+    driver: bridge
+
 services:
-  # Backend (Flask)
   backend:
-    build: ./backend
+    build: ./back
     ports:
       - "5000:5000"
     environment:
@@ -12,36 +16,35 @@ services:
       - mysql_db
       - postgres_db
       - sqlserver_db
+    networks:  # Conectar este servicio a la red
+      - ventas_network
 
-  # MySQL
   mysql_db:
-    image: mysql:8.0  
+    image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: mysql_password
+      MYSQL_ROOT_PASSWORD: mysql123
       MYSQL_DATABASE: ventas_mysql
     volumes:
-      - ./scripts/mysql:/docker-entrypoint-initdb.d 
-    ports:
-      - "3306:3306"  
+      - ./DB/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - ventas_network
 
-  # PostgreSQL
   postgres_db:
-    image: postgres:13  
+    image: postgres:13
     environment:
-      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_PASSWORD: postgres123
       POSTGRES_DB: postgres
     volumes:
-      - ./scripts/postgres:/docker-entrypoint-initdb.d
-    ports:
-      - "5432:5432"  
-      
-  # SQL Server
+      - ./DB/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - ventas_network
+
   sqlserver_db:
-    image: mcr.microsoft.com/mssql/server:2019-latest  
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      SA_PASSWORD: SqlServerPassword123!
+      SA_PASSWORD: SqlServer123
       ACCEPT_EULA: Y
     volumes:
-      - ./scripts/sqlserver:/docker-entrypoint-initdb.d
-    ports:
-      - "1433:1433"  
+      - ./DB/sqlserver:/docker-entrypoint-initdb.d
+    networks:
+      - ventas_network
